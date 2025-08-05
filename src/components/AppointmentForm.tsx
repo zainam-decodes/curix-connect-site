@@ -10,7 +10,7 @@ import { Calendar, Clock, User, Phone, Mail, FileText } from "lucide-react";
 
 const AppointmentForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState("");
+  const webhookUrl = "https://zayja.app.n8n.cloud/webhook-test/3ed864ad-269e-4ba8-a82c-97f8f19f0cdf";
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -30,15 +30,6 @@ const AppointmentForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!webhookUrl) {
-      toast({
-        title: "Configuration Required",
-        description: "Please enter your n8n webhook URL to process appointments",
-        variant: "destructive",
-      });
-      return;
-    }
 
     // Basic form validation
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
@@ -53,18 +44,24 @@ const AppointmentForm = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "no-cors",
-        body: JSON.stringify({
-          ...formData,
-          timestamp: new Date().toISOString(),
-          source: "CURIX Hospital Website",
-          type: "appointment_request"
-        }),
+      // Create URL with query parameters like the GET method example
+      const params = new URLSearchParams({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        preferredDate: formData.preferredDate,
+        preferredTime: formData.preferredTime,
+        department: formData.department,
+        reason: formData.reason,
+        message: formData.message,
+      });
+
+      const fullUrl = `${webhookUrl}?${params.toString()}`;
+      
+      // Use GET method like your example
+      const response = await fetch(fullUrl, {
+        method: "GET",
+        mode: "no-cors"
       });
 
       toast({
@@ -119,24 +116,6 @@ const AppointmentForm = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
-              {/* n8n Webhook URL Configuration */}
-              <div className="mb-8 p-4 bg-muted rounded-lg">
-                <Label htmlFor="webhookUrl" className="text-sm font-medium text-muted-foreground">
-                  n8n Webhook URL (Required for form processing)
-                </Label>
-                <Input
-                  id="webhookUrl"
-                  type="url"
-                  value={webhookUrl}
-                  onChange={(e) => setWebhookUrl(e.target.value)}
-                  placeholder="https://your-n8n-instance.com/webhook/appointment"
-                  className="mt-2"
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Enter your n8n webhook URL to integrate appointment requests with your workflow
-                </p>
-              </div>
-
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Personal Information */}
                 <div className="grid md:grid-cols-2 gap-6">
