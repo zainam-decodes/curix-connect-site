@@ -3,8 +3,8 @@ import { ArrowRight, Shield, Users, Clock } from "lucide-react";
 import heroImage from "@/assets/hero-medical.jpg";
 
 const Hero = () => {
-  const scrollToAppointment = () => {
-    const element = document.getElementById('appointment');
+  const scrollToContact = () => {
+    const element = document.getElementById('contact');
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -36,10 +36,10 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <Button 
               size="lg" 
-              onClick={scrollToAppointment}
+              onClick={scrollToContact}
               className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-lg px-8 py-4"
             >
-              Book Appointment <ArrowRight className="ml-2 h-5 w-5" />
+              Contact Us <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
               size="lg" 
