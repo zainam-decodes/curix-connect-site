@@ -51,7 +51,7 @@ const ChatBot = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://serenascorbin01.app.n8n.cloud/webhook-test/0217e816-c30b-4abe-84cf-41710cdcd130', {
+      const response = await fetch('https://serenascorbin01.app.n8n.cloud/webhook/0217e816-c30b-4abe-84cf-41710cdcd130', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -118,24 +118,24 @@ const ChatBot = () => {
         <Button
           onClick={() => setIsOpen(true)}
           size="lg"
-          className="rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300 bg-medical-blue hover:bg-medical-blue/90"
+          className="rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-500 bg-medical-blue hover:bg-medical-blue/90 hover:scale-110 animate-bounce-subtle animate-pulse-glow"
         >
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle className="w-6 h-6 transition-transform duration-300 hover:rotate-12" />
         </Button>
       )}
 
       {isOpen && (
-        <Card className="w-80 h-96 flex flex-col shadow-xl border-0 bg-card">
-          <div className="flex items-center justify-between p-4 border-b bg-medical-blue text-white rounded-t-lg">
-            <div className="flex items-center gap-2">
-              <Bot className="w-5 h-5" />
+        <Card className="w-80 h-96 flex flex-col shadow-xl border-0 bg-card animate-slide-up backdrop-blur-sm">
+          <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-medical-blue to-medical-green text-white rounded-t-lg">
+            <div className="flex items-center gap-2 animate-fade-in">
+              <Bot className="w-5 h-5 animate-bounce" />
               <h3 className="font-semibold">CURIX Assistant</h3>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-white/20 h-8 w-8 p-0"
+              className="text-white hover:bg-white/20 h-8 w-8 p-0 hover:rotate-90 transition-all duration-300"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -143,36 +143,42 @@ const ChatBot = () => {
 
           <ScrollArea className="flex-1 p-4">
             <div className="space-y-4">
-              {messages.map((message) => (
+              {messages.map((message, index) => (
                 <div
                   key={message.id}
-                  className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${message.isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
+                    className={`max-w-[80%] p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
                       message.isUser
-                        ? 'bg-medical-blue text-white'
-                        : 'bg-muted text-foreground'
+                        ? 'bg-gradient-to-r from-medical-blue to-primary text-white shadow-md hover:shadow-lg'
+                        : 'bg-muted text-foreground border border-border hover:bg-muted/80 shadow-sm hover:shadow-md'
                     }`}
                   >
                     <div className="flex items-start gap-2">
-                      {!message.isUser && <Bot className="w-4 h-4 mt-0.5 flex-shrink-0" />}
-                      {message.isUser && <User className="w-4 h-4 mt-0.5 flex-shrink-0" />}
-                      <p className="text-sm">{message.text}</p>
+                      {!message.isUser && (
+                        <Bot className="w-4 h-4 mt-0.5 flex-shrink-0 text-medical-blue animate-pulse" />
+                      )}
+                      {message.isUser && (
+                        <User className="w-4 h-4 mt-0.5 flex-shrink-0 opacity-80" />
+                      )}
+                      <p className="text-sm leading-relaxed">{message.text}</p>
                     </div>
                   </div>
                 </div>
               ))}
               {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-muted p-3 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <Bot className="w-4 h-4" />
+                <div className="flex justify-start animate-fade-in">
+                  <div className="bg-muted p-3 rounded-xl border border-border shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <Bot className="w-4 h-4 text-medical-blue animate-pulse" />
                       <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-medical-blue rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                        <div className="w-2 h-2 bg-medical-blue rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                        <div className="w-2 h-2 bg-medical-blue rounded-full animate-bounce"></div>
                       </div>
+                      <span className="text-xs text-muted-foreground animate-pulse">Typing...</span>
                     </div>
                   </div>
                 </div>
@@ -181,7 +187,7 @@ const ChatBot = () => {
             <div ref={messagesEndRef} />
           </ScrollArea>
 
-          <div className="p-4 border-t">
+          <div className="p-4 border-t bg-gradient-to-r from-background to-muted/30">
             <div className="flex gap-2">
               <Input
                 value={inputMessage}
@@ -189,16 +195,39 @@ const ChatBot = () => {
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
                 disabled={isLoading}
-                className="flex-1"
+                className="flex-1 border-medical-blue/20 focus:border-medical-blue transition-all duration-300 hover:border-medical-blue/40"
               />
               <Button
                 onClick={sendMessage}
                 disabled={!inputMessage.trim() || isLoading}
                 size="sm"
-                className="bg-medical-blue hover:bg-medical-blue/90"
+                className="bg-gradient-to-r from-medical-blue to-primary hover:from-medical-blue/90 hover:to-primary/90 transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg disabled:opacity-50 disabled:hover:scale-100"
               >
-                <Send className="w-4 h-4" />
+                <Send className={`w-4 h-4 transition-transform duration-200 ${isLoading ? 'animate-pulse' : 'hover:translate-x-0.5'}`} />
               </Button>
+            </div>
+            
+            {/* Quick reply suggestions */}
+            <div className="flex gap-2 mt-3 overflow-x-auto">
+              {[
+                "Book appointment",
+                "Emergency services", 
+                "Contact info",
+                "Services offered"
+              ].map((suggestion, idx) => (
+                <button
+                  key={suggestion}
+                  onClick={() => {
+                    setInputMessage(suggestion);
+                    setTimeout(() => sendMessage(), 100);
+                  }}
+                  disabled={isLoading}
+                  className="px-3 py-1 text-xs bg-medical-accent text-medical-blue rounded-full hover:bg-medical-blue hover:text-white transition-all duration-300 whitespace-nowrap border border-medical-blue/20 hover:border-medical-blue disabled:opacity-50 hover:scale-105 animate-fade-in"
+                  style={{ animationDelay: `${idx * 0.1}s` }}
+                >
+                  {suggestion}
+                </button>
+              ))}
             </div>
           </div>
         </Card>
