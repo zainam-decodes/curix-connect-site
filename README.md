@@ -1,4 +1,4 @@
-# Welcome Automation project
+# Welcome to my NO CODE Automation project
 
 ## What technologies are used for this project?
 
