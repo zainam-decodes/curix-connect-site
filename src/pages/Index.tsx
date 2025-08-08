@@ -7,6 +7,7 @@ import Team from "@/components/Team";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
+import ChatBotTest from "@/components/ChatBotTest";
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
       <Contact />
       <Footer />
       <ChatBot />
+      <ChatBotTest />
     </div>
   );
 };
