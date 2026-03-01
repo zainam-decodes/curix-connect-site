@@ -10,3 +10,4 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+[VIEW MY SITE](https://curix-connect-site.lovable.app)
